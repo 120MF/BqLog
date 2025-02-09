@@ -176,19 +176,19 @@ elseif(TARGET_PLATFORM STREQUAL "ios")
     endif()
 endif()
 
-add_custom_command(TARGET BqLog POST_BUILD
+add_custom_command(TARGET BqLog PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove_directory "${ARTIFACTS_OUTPUT_BASE_DIR}/include"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/../include" "${ARTIFACTS_OUTPUT_BASE_DIR}/include"
     COMMENT "Copying include headers to dist folder"
 )
 if(BUILD_TYPE STREQUAL "dynamic_lib")
-    add_custom_command(TARGET BqLog POST_BUILD
+    add_custom_command(TARGET BqLog PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${ARTIFACTS_OUTPUT_BASE_DIR}/include/bq_common/platform/build_type_dynamic_lib_import.h" "${ARTIFACTS_OUTPUT_BASE_DIR}/include/bq_common/platform/build_type.h"
         COMMENT "Switch include headers to dynamic lib mode"
     )
     if(TARGET_PLATFORM STREQUAL "mac" OR TARGET_PLATFORM STREQUAL "ios")
         if(APPLE_LIB_FORMAT STREQUAL "framework")
-            add_custom_command(TARGET BqLog POST_BUILD
+            add_custom_command(TARGET BqLog PRE_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different "${ARTIFACTS_OUTPUT_BASE_DIR}/include/bq_common/platform/build_type_dynamic_lib_import.h" "$<TARGET_FILE_DIR:BqLog>/Headers/bq_common/platform/build_type.h"
                 COMMENT "Switch Framework headers to dynamic lib mode"
             )
